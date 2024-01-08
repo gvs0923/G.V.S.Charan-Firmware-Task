@@ -8,6 +8,30 @@ void setup() {
 }
 
 void loop() {
+
+
+      static unsigned long startTime = 0;
+  static unsigned int byteCount = 0;
+
+  if (Serial.available() > 0 && byteCount < EEPROM_SIZE) {
+    char receivedChar = Serial.read();
+    EEPROM.write(byteCount, receivedChar);
+    byteCount++;
+
+    // for the calculating the transmisson speed.
+    unsigned long currentTime = micros();
+    unsigned long elapsedTime = currentTime - startTime;
+
+    if (elapsedTime >= 1000000) {  // Print every second
+      float transmissionSpeed = (float)byteCount * 8 / (float)elapsedTime;
+      Serial.print("Transmission Speed: ");
+      Serial.print(transmissionSpeed);
+      Serial.println(" bps");
+      startTime = currentTime;
+    }
+  }
+
+//for the printing of the data.
   for (int address = 0; address < EEPROM.length(); address++) {
     char value = EEPROM.read(address);
     Serial.print("Address ");
