@@ -1,0 +1,21 @@
+# Code file of the MCU side.
+
+
+#include <EEPROM.h>
+
+void setup() {
+  Serial.begin(2400);
+}
+
+void loop() {
+  for (int address = 0; address < EEPROM.length(); address++) {
+    char value = EEPROM.read(address);
+    Serial.print("Address ");
+    Serial.print(address);
+    Serial.print(": ");
+    Serial.println(value);
+    delay(10);
+  }
+
+  delay(5000);
+}
