@@ -1,0 +1,33 @@
+#The PC side code of the firmware task.
+
+
+import serial
+import time
+
+BAUD_RATE = 2400
+PORT = 'COM9'  
+DATA_FILE = "assign.txt"
+
+def send_data():
+    ser = serial.Serial(PORT, BAUD_RATE, timeout=1)
+
+    with open(DATA_FILE, 'r') as file:
+        data = file.read()
+
+    ser.write(data.encode('utf-8'))
+    ser.close()
+
+if __name__ == "__main__":
+    send_data()  
+    time.sleep(2)
+
+def receive_data():
+    ser = serial.Serial(PORT, BAUD_RATE, timeout=1)
+
+    while True:
+        data = ser.readline()
+        if data:
+            print(data.decode('utf-8'), end='')
+
+if __name__ == "__main__":
+    receive_data()
